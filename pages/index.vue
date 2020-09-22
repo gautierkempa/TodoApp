@@ -6,7 +6,7 @@
           <div class="card-body">
 
             <ul class="list-group">
-              <li class="list-group-item" v-for="(todo, index) in todos" :key="todo"> <a href="#" @click="removeTodo(index)"> {{todo}} </a></li>
+              <li class="list-group-item" v-for="(todo, index) in todos" :key="todo"> <a href="#" @click="removeTodo(todo, index)"> {{todo.todo}} </a></li>
             </ul>
 
             <form @submit.prevent="sub">
@@ -25,6 +25,9 @@
 </template>
 
 <script>
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+
 export default {
 
 data(){
@@ -42,26 +45,56 @@ data(){
  },
 
   mounted(){
+    firebase.firestore().collection('todos').get().then((res) => {
+
+            res.forEach(x => {
+                this.$store.commit('setTodo', x.data())
+            })
+          }) 
+
+    
    
   },
 
   methods:{
     
     sub(){
+
       if(this.todo){
 
-      
-        this.$store.commit('addTodo', this.todo);
-        this.todo = '';
+        firebase.firestore().collection('todos').add({
 
+
+
+        }).then((res) =>{
+
+          firebase.firestore().collection('todos').doc(res.id).set({
+
+            todo: this.todo,
+            id: res.id
+          }).then(() => {
+
+             this.$store.commit('addTodo',({todo: this.todo, id: res.id}) )
+
+             this.todo = ""
+          })
+        })
       }
+
     },
 
 
-    removeTodo(index){
-     this.$store.commit('removeTodo', index);
+    removeTodo(todo, index){
+      
+     firebase.firestore().collection('todos').doc(todo.id).delete().then(() => {
+
+       console.log('successfully deleted')
+       this.$store.commit('removeTodo', index);
+       
+     })
     }
     
   }
 }
+
 </script>
