@@ -1,4 +1,4 @@
 export default () => ({
 
-    todos : ["whatever123", "whatever"]
+    todos : ["whatever123", "whatever", "does it works ?"]
 })
