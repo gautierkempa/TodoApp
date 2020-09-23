@@ -6,7 +6,7 @@
           <div class="card-body">
 
             <ul class="list-group">
-              <li class="list-group-item" v-for="(todo, index) in todos" :key="todo"> <a href="#" @click="removeTodo(todo, index)"> {{todo.todo}} </a></li>
+              <li class="list-group-item" v-for="(todo, index) in todos" :key="todo.id"> <a href="#" @click="removeTodo(todo, index)"> {{todo.todo}} </a></li>
             </ul>
 
             <form @submit.prevent="sub">
