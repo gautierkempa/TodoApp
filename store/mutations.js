@@ -11,6 +11,5 @@ export default {
     },
     removeTodo(state, index){
         Vue.delete(state.todos, index);
-        
     }
 }
